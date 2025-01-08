@@ -1,7 +1,9 @@
-import CardWrapper from "../components/CardWrapper";
-import ChartWrapper from "../components/ChartWrapper";
-import LatestInvoicesWrapper from "../components/LatestInvoicesWrapper";
-import { bebas_Neue } from "../ui/font";
+import CardWrapper from "@/app/components/CardWrapper";
+import ChartWrapper from "@/app/components/ChartWrapper";
+import LatestInvoicesWrapper from "@/app/components/LatestInvoicesWrapper";
+import { RevenueChartSkeleton } from "@/app/components/Skelleton";
+import { bebas_Neue } from "@/app/ui/font";
+import { Suspense } from "react";
 
 //Hacemos el fetch desde un server components haciendo el llamado a la funcion fetchCardData
 const Dashboard = async () => {
@@ -18,7 +20,10 @@ const Dashboard = async () => {
           <h2 className={`${bebas_Neue.className} mb-4 text-xl md:text-2xl`}>
             Recent Reveneus
           </h2>
-          <ChartWrapper />
+          {/* Con Suspense podemos manejar datos diferidos */}
+          <Suspense fallback={<RevenueChartSkeleton />}>
+            <ChartWrapper />
+          </Suspense>
         </div>
         <div className="w-full md:col-span-4">
           <h2 className={`${bebas_Neue.className} mb-4 text-xl md:text-2xl`}>

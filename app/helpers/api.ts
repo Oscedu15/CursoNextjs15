@@ -46,6 +46,10 @@ export const fetchRevenue = async () => {
       headers,
     });
     const revenueResult = await fetchRevenue.json();
+    //Para relantizar la respuesta y probar el skelleton
+    console.log("Fetching Revenue data...");
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    console.log("Data completed after 3 seconds...")
 
     return revenueResult;
   } catch (error) {

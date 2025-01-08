@@ -1,5 +1,6 @@
+import SideNav from '@/app/components/SideNav'
 import { FC, PropsWithChildren } from 'react'
-import SideNav from '../components/SideNav'
+
 
 //Layout lo usamos como una plantilla, para tener nuestro sidebar
 
