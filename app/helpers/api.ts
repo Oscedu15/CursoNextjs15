@@ -71,3 +71,18 @@ export const fetchLatestInvoices = async () => {
     throw new Error("Failed to fetch fetchLatestInvoices data.");
   }
 };
+
+
+export const fetchFilteredInvoices = async (query?: string, currentPage?: number) => {
+  try {
+    const fetchFilteredInvoices = await fetch(`${process.env.BACKEND_URL}/invoices/paginate`, {
+      headers,
+    });
+    const resultFetchFilteredInvoices = await fetchFilteredInvoices.json();
+
+    return resultFetchFilteredInvoices;
+  } catch (error) {
+    console.log("error :>> ", error);
+    throw new Error("Failed to fetch resultFetchFilteredInvoices data.");
+  }
+};
