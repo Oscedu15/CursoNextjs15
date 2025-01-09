@@ -1,11 +1,15 @@
-import React from "react";
+import React, { FC } from "react";
 import { fetchFilteredInvoices } from "../helpers/api";
 import { InvoiceTable } from "anjrot-components";
 import Image from "next/image";
 
-const InvoiceWrapper = async () => {
+interface InvoiceWrapperProps {
+  query?:string
+}
+
+const InvoiceWrapper: FC<InvoiceWrapperProps> = async ({query}) => {
   //Llamado al backend para recibir los datos que llenaran las tablas
-  const getInvoices = await fetchFilteredInvoices();
+  const getInvoices = await fetchFilteredInvoices(query || '');
   return (
     <InvoiceTable
       invoices={getInvoices}

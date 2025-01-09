@@ -75,7 +75,7 @@ export const fetchLatestInvoices = async () => {
 
 export const fetchFilteredInvoices = async (query?: string, currentPage?: number) => {
   try {
-    const fetchFilteredInvoices = await fetch(`${process.env.BACKEND_URL}/invoices/paginate`, {
+    const fetchFilteredInvoices = await fetch(`${process.env.BACKEND_URL}/invoices/paginate?q=${query}`, {
       headers,
     });
     const resultFetchFilteredInvoices = await fetchFilteredInvoices.json();
