@@ -74,15 +74,28 @@ export const fetchLatestInvoices = async () => {
 
 
 export const fetchFilteredInvoices = async (query?: string, currentPage?: number) => {
+  console.log("currentPage :>> ", currentPage);
   try {
-    const fetchFilteredInvoices = await fetch(`${process.env.BACKEND_URL}/invoices/paginate?q=${query}`, {
-      headers,
-    });
-    const resultFetchFilteredInvoices = await fetchFilteredInvoices.json();
+    const fetchFilteredInvoices = await fetch(`${process.env.BACKEND_URL}/invoices/paginate?q=${query}&page=${currentPage}`, { headers });
+    console.log("fetchFilteredInvoices :>> ", fetchFilteredInvoices.status);
+    const resultfetchFilteredInvoices = await fetchFilteredInvoices.json();
 
-    return resultFetchFilteredInvoices;
+    return resultfetchFilteredInvoices;
   } catch (error) {
     console.log("error :>> ", error);
-    throw new Error("Failed to fetch resultFetchFilteredInvoices data.");
+    throw new Error("Failed to fetch resultfetchFilteredInvoices data.");
   }
 };
+
+//Llamada de Api, para obtener el total de paginas de la aplicacion
+export const fetchInvoicesPages = async (query: string) => {
+  try {
+    const getInvoicesPages = await fetch(`${process.env.BACKEND_URL}/invoices/page-count?q=${query}`, { headers });
+    const resultGetInvoicesPages = await getInvoicesPages.json();
+
+    return resultGetInvoicesPages;
+  } catch (error) {
+    console.log("error :>> ", error);
+    throw new Error("Failed to fetch resultGetInvoicesPages data.");
+  }
+}

@@ -1,17 +1,21 @@
 import InvoiceWrapper from "@/app/components/InvoiceWrapper"
+import PaginationWrapper from "@/app/components/PaginationWrapper"
 import Search from "@/app/components/Search"
 import { InvoiceSkeleton } from "@/app/components/Skelleton"
+import { fetchInvoicesPages } from "@/app/helpers/api"
 import { bebas_Neue } from "@/app/ui/font"
 import { FC, Suspense } from "react"
 
 interface InvoicesProps {
-  searchParams?: Promise<{query?:string}>
+  searchParams?: Promise<{query?:string, page?:number}>
 }
 
 //?Tecnica USRLsearchParams
 const Invoices: FC<InvoicesProps> = async ({searchParams}) => {
   const params = await searchParams;
   console.log(`params1: >>`, params);
+
+  const totalPages = await fetchInvoicesPages(params?.query || '');
 
   return (
     <div className="w-full">
@@ -24,8 +28,11 @@ const Invoices: FC<InvoicesProps> = async ({searchParams}) => {
           <Search/>
       </div>
       <Suspense fallback={<InvoiceSkeleton/>}>
-        <InvoiceWrapper query={params?.query}/>
+        <InvoiceWrapper query={params?.query} page={params?.page}/>
       </Suspense>
+      <div className="mt-5 flex w-full justify-center">
+        <PaginationWrapper totalpages={totalPages}/>
+      </div>
     </div>
   )
 }

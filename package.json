@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "anjrot-components": "^1.13.2",
+    "anjrot-components": "^2.0.0",
     "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

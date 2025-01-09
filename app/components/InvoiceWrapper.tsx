@@ -4,12 +4,13 @@ import { InvoiceTable } from "anjrot-components";
 import Image from "next/image";
 
 interface InvoiceWrapperProps {
-  query?:string
+  query?:string;
+  page?:number;
 }
 
-const InvoiceWrapper: FC<InvoiceWrapperProps> = async ({query}) => {
+const InvoiceWrapper: FC<InvoiceWrapperProps> = async ({query, page}) => {
   //Llamado al backend para recibir los datos que llenaran las tablas
-  const getInvoices = await fetchFilteredInvoices(query || '');
+  const getInvoices = await fetchFilteredInvoices(query || '', page);
   return (
     <InvoiceTable
       invoices={getInvoices}
