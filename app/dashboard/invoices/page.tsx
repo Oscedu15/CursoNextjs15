@@ -5,6 +5,8 @@ import { InvoiceSkeleton } from "@/app/components/Skelleton"
 import { fetchInvoicesPages } from "@/app/helpers/api"
 import { bebas_Neue } from "@/app/ui/font"
 import { FC, Suspense } from "react"
+import {TableButtons} from "anjrot-components"
+import Link from "next/link"
 
 interface InvoicesProps {
   searchParams?: Promise<{query?:string, page?:number}>
@@ -26,6 +28,8 @@ const Invoices: FC<InvoicesProps> = async ({searchParams}) => {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
           <Search/>
+          <TableButtons ButtonType={Link} title="Create Invoices" 
+          href="/dashboard/invoices/create"/>
       </div>
       <Suspense fallback={<InvoiceSkeleton/>}>
         <InvoiceWrapper query={params?.query} page={params?.page}/>
