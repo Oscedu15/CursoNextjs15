@@ -112,3 +112,16 @@ export const fetchCustomers = async () => {
     throw new Error("Failed to fetch customers data.");
   }
 }
+
+//Hacer llamada para buscar factura por id
+export const fetchInvoiceId = async (id:string) => {
+  try {
+    const getInvoiceId = await fetch(`${process.env.BACKEND_URL}/invoice/${id}`, { headers });
+    const resultInvoiceId = await getInvoiceId.json();
+
+    return resultInvoiceId;
+  } catch (error) {
+    console.log("error :>> ", error);
+    throw new Error("Failed to fetch resultInvoiceId data.");
+  }
+}
