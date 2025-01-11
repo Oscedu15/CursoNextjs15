@@ -73,3 +73,69 @@ export const createInvoice = async (
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 };
+
+//todo: updateInvoice funcion para actualizar factura
+export const updateInvoice = async (prevState: CreateFormState, formData: FormData) => {
+  console.log("formData :>> ", formData);
+  const validatedFields = UpdateInvoice.safeParse({
+    id: formData.get("invoiceId"),
+    customerId: formData.get("customerId"),
+    amount: formData.get("amount"),
+    status: formData.get("status")
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Update Invoice."
+    };
+  }
+
+  const { customerId, amount, status, id } = validatedFields.data;
+  const amountInCents = amount * 100;
+
+  const body = {
+    status,
+    amount: amountInCents,
+    customer: customerId
+  };
+
+  try {
+    await fetch(`${process.env.BACKEND_URL}/invoices/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo"
+      },
+      method: "PUT",
+      body: JSON.stringify(body)
+    });
+  } catch (error) {
+    return {
+      message: "Database Error: Failed to Update Invoice."
+    };
+  }
+  revalidatePath("/dashboard/invoices");
+  redirect("/dashboard/invoices");
+};
+
+//todo: deleteInvoice funcion para actualizar factura
+export const deleteInvoice = async (formData: FormData) => {
+  const id = formData.get("invoiceId");
+
+  try {
+    await fetch(`${process.env.BACKEND_URL}/invoices/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo"
+      },
+      method: "DELETE"
+    });
+    revalidatePath("/dashboard/invoices");
+  } catch (error) {
+    return {
+      message: "Database Error: Failed to Update Invoice."
+    };
+  }
+};

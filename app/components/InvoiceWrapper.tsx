@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { fetchFilteredInvoices } from "../helpers/api";
 import { InvoiceTable } from "anjrot-components";
 import Image from "next/image";
+import { deleteInvoice } from "../helpers/action";
 
 interface InvoiceWrapperProps {
   query?:string;
@@ -17,6 +18,7 @@ const InvoiceWrapper: FC<InvoiceWrapperProps> = async ({query, page}) => {
       ImgComponent={Image}
       className="bg-slate-700"
       tableHeader={{ className: "text-white" }}
+      deleteAction={deleteInvoice}
     />
   );
 };

@@ -2,15 +2,14 @@
 
 import { CreateForm, CreateFormState, CustomerField, InvoiceForm } from "anjrot-components";
 import Link from "next/link";
-import {FC} from "react";
+import {FC, useActionState} from "react";
+import { updateInvoice } from "../helpers/action";
 
-const EditWrapper: FC<{customers: CustomerField[]; invoice: InvoiceForm}> = ({customers, invoice}) => {
-    const initialState: CreateFormState = {message: null, errors: {}};
-    // const [state, formAction] = useActionState(createInvoice, initialState)
-  return (
-    <CreateForm customers={customers}  state={initialState} 
-    AnchorElement={Link} invoice={invoice}/>
-  )
-}
+const EditWrapper: FC<{ customers: CustomerField[]; invoice: InvoiceForm }> = ({ customers, invoice }) => {
+  const initialState: CreateFormState = { message: null, errors: {} };
+  const [state, formAction] = useActionState(updateInvoice, initialState);
+
+  return <CreateForm customers={customers} state={state} action={formAction} AnchorElement={Link} invoice={invoice} />;
+};
 
 export default EditWrapper
