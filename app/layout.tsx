@@ -3,11 +3,25 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { roboto } from "./ui/font";
 
-
-
 export const metadata: Metadata = {
-  title: "AnjrotDev",
-  description: "Tutorial Next Js 15",
+  //El %s en template, nos permite capturar lo que este en el titulo de la pagina que este pasando por este layout
+  title: {
+    template: "%s | Anjrot Dashboard",
+    default: "Anjrot Dev"
+  },
+  description: "Tutorial del tutorial de Next js",
+  openGraph: {
+    type: "website",
+    url: "https://example.com",
+    title: "My Website",
+    description: "My Website Description",
+    siteName: "My Website",
+    images: [
+      {
+        url: "/public/hero-desktop.png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

@@ -7,6 +7,12 @@ import { bebas_Neue } from "@/app/ui/font"
 import { FC, Suspense } from "react"
 import {TableButtons} from "anjrot-components"
 import Link from "next/link"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Invoices",
+  description: "Tutorial Next Js 15",
+};
 
 interface InvoicesProps {
   searchParams?: Promise<{query?:string, page?:number}>
