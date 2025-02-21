@@ -1,6 +1,7 @@
 import { BsArrowRight } from "react-icons/bs";
 import Header from "./components/Header";
 import { bebas_Neue } from "./ui/font";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -23,17 +24,17 @@ export default function Home() {
             <strong>Welcome to AnjrotDev</strong> Tutorial Next Js
           </p>
           <a
-            href="#"
+            href="/login"
             className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
           >
-            <span>loging</span>{" "}
+            <span>Loging</span>{" "}
             <BsArrowRight className="translate-x-0 hover:translate-x-3 duration-150" />
           </a>
         </div>
         {/* Lado derecho de la pantalla */}
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
          {/* Version Desktop */}
-          <img
+          <Image
             src="/hero-desktop.png"
             alt="Screenshots of the dashboard"
             width={1000}
@@ -41,7 +42,7 @@ export default function Home() {
             className="hidden md:block"
           />
           {/* Version Mobile */}
-          <img
+          <Image
             src="/hero-mobile.png"
             alt="Screenshots of the dashboard mobile"
             width={560}

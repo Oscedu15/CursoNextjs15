@@ -1,9 +1,12 @@
 "use server";
 
+import { auth, signIn } from "@/auth";
 import { CreateFormState } from "anjrot-components";
+import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { authHeaders } from "./utils";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -28,6 +31,7 @@ export const createInvoice = async (
   prevState: CreateFormState,
   formData: FormData
 ) => {
+  const session = await auth();
   const validatedFields = CreateInvoice.safeParse({
     //safeParse es un metodo que se encarga de hacer el match de los tipos
     customerId: formData.get("customerId"),
@@ -57,11 +61,7 @@ export const createInvoice = async (
 
   try {
     await fetch(`${process.env.BACKEND_URL}/invoices`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWYwYTJhMmYzNGFjMWVlY2UxN2JiZSIsImVtYWlsIjoib3NjYXJlZ2FyY2lhbGVvbkBob3RtYWlsLmNvbSIsIm5hbWUiOiJvc2NlZHUxNSIsImlhdCI6MTczNDI4MjAxOH0.ozJnIPr9xrFaBctdR7NCN7VFvgcgs2HMSZ2HVkuXyMk",
-      },
+      headers: authHeaders(session?.user?.token),
       method: "POST",
       body: JSON.stringify(body),
     });
@@ -80,6 +80,7 @@ export const updateInvoice = async (
   prevState: CreateFormState,
   formData: FormData
 ) => {
+  const session = await auth();
   console.log("formData :>> ", formData);
   const validatedFields = UpdateInvoice.safeParse({
     id: formData.get("invoiceId"),
@@ -106,11 +107,7 @@ export const updateInvoice = async (
 
   try {
     await fetch(`${process.env.BACKEND_URL}/invoices/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo",
-      },
+      headers: authHeaders(session?.user?.token),
       method: "PUT",
       body: JSON.stringify(body),
     });
@@ -126,15 +123,12 @@ export const updateInvoice = async (
 
 //todo: deleteInvoice funcion para actualizar factura
 export const deleteInvoice = async (formData: FormData) => {
+  const session = await auth();
   const id = formData.get("invoiceId");
 
   try {
     await fetch(`${process.env.BACKEND_URL}/invoices/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo",
-      },
+      headers: authHeaders(session?.user?.token),
       method: "DELETE",
     });
     revalidatePath("/dashboard/invoices");
@@ -143,5 +137,26 @@ export const deleteInvoice = async (formData: FormData) => {
     return {
       message: "Database Error: Failed to Update Invoice.",
     };
+  }
+};
+
+//todo: authenticate funcion para autenticar usuario
+export const authenticate = async (
+  state: string | undefined,
+  formData: FormData
+) => {
+  try {
+    //Recibe el proveedor y los datos qe vienen en el formulario
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
   }
 };
