@@ -48,8 +48,8 @@ export const fetchRevenue = async () => {
     const revenueResult = await fetchRevenue.json();
     //Para relantizar la respuesta y probar el skelleton
     console.log("Fetching Revenue data...");
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    console.log("Data completed after 3 seconds...")
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    console.log("Data completed after 3 seconds...");
 
     return revenueResult;
   } catch (error) {
@@ -72,11 +72,16 @@ export const fetchLatestInvoices = async () => {
   }
 };
 
-
-export const fetchFilteredInvoices = async (query?: string, currentPage?: number) => {
+export const fetchFilteredInvoices = async (
+  query?: string,
+  currentPage?: number
+) => {
   console.log("currentPage :>> ", currentPage);
   try {
-    const fetchFilteredInvoices = await fetch(`${process.env.BACKEND_URL}/invoices/paginate?q=${query}&page=${currentPage}`, { headers });
+    const fetchFilteredInvoices = await fetch(
+      `${process.env.BACKEND_URL}/invoices/paginate?q=${query}&page=${currentPage}`,
+      { headers }
+    );
     console.log("fetchFilteredInvoices :>> ", fetchFilteredInvoices.status);
     const resultfetchFilteredInvoices = await fetchFilteredInvoices.json();
 
@@ -90,7 +95,10 @@ export const fetchFilteredInvoices = async (query?: string, currentPage?: number
 //Llamada de Api, para obtener el total de paginas de la aplicacion
 export const fetchInvoicesPages = async (query: string) => {
   try {
-    const getInvoicesPages = await fetch(`${process.env.BACKEND_URL}/invoices/page-count?q=${query}`, { headers });
+    const getInvoicesPages = await fetch(
+      `${process.env.BACKEND_URL}/invoices/page-count?q=${query}`,
+      { headers }
+    );
     const resultGetInvoicesPages = await getInvoicesPages.json();
 
     return resultGetInvoicesPages;
@@ -98,12 +106,13 @@ export const fetchInvoicesPages = async (query: string) => {
     console.log("error :>> ", error);
     throw new Error("Failed to fetch resultGetInvoicesPages data.");
   }
-}
-
+};
 
 export const fetchCustomers = async () => {
   try {
-    const getCustomers = await fetch(`${process.env.BACKEND_URL}/customer`, { headers });
+    const getCustomers = await fetch(`${process.env.BACKEND_URL}/customer`, {
+      headers,
+    });
     const resultGetCustomers = await getCustomers.json();
 
     return resultGetCustomers;
@@ -111,12 +120,18 @@ export const fetchCustomers = async () => {
     console.log("error :>> ", error);
     throw new Error("Failed to fetch customers data.");
   }
-}
+};
 
 //Hacer llamada para buscar factura por id
-export const fetchInvoiceId = async (id:string) => {
+export const fetchInvoiceId = async (id: string) => {
   try {
-    const getInvoiceId = await fetch(`${process.env.BACKEND_URL}/invoice/${id}`, { headers });
+    const getInvoiceId = await fetch(
+      `${process.env.BACKEND_URL}/invoice/${id}`,
+      { headers }
+    );
+    console.log("getInvoiceById:>>>", getInvoiceId);
+    if (getInvoiceId.status === 404) return null;
+    if (getInvoiceId.status !== 200) throw new Error("Error fetching invoice");
     const resultInvoiceId = await getInvoiceId.json();
 
     return resultInvoiceId;
@@ -124,4 +139,4 @@ export const fetchInvoiceId = async (id:string) => {
     console.log("error :>> ", error);
     throw new Error("Failed to fetch resultInvoiceId data.");
   }
-}
+};

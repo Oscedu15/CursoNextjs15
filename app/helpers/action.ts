@@ -60,12 +60,13 @@ export const createInvoice = async (
       headers: {
         "Content-Type": "application/json",
         Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWYwYTJhMmYzNGFjMWVlY2UxN2JiZSIsImVtYWlsIjoib3NjYXJlZ2FyY2lhbGVvbkBob3RtYWlsLmNvbSIsIm5hbWUiOiJvc2NlZHUxNSIsImlhdCI6MTczNDI4MjAxOH0.ozJnIPr9xrFaBctdR7NCN7VFvgcgs2HMSZ2HVkuXyMk",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NWYwYTJhMmYzNGFjMWVlY2UxN2JiZSIsImVtYWlsIjoib3NjYXJlZ2FyY2lhbGVvbkBob3RtYWlsLmNvbSIsIm5hbWUiOiJvc2NlZHUxNSIsImlhdCI6MTczNDI4MjAxOH0.ozJnIPr9xrFaBctdR7NCN7VFvgcgs2HMSZ2HVkuXyMk",
       },
       method: "POST",
       body: JSON.stringify(body),
     });
   } catch (error) {
+    console.log(error);
     return {
       message: "Database Error: Failed to Create Invoice.",
     };
@@ -75,19 +76,22 @@ export const createInvoice = async (
 };
 
 //todo: updateInvoice funcion para actualizar factura
-export const updateInvoice = async (prevState: CreateFormState, formData: FormData) => {
+export const updateInvoice = async (
+  prevState: CreateFormState,
+  formData: FormData
+) => {
   console.log("formData :>> ", formData);
   const validatedFields = UpdateInvoice.safeParse({
     id: formData.get("invoiceId"),
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
-    status: formData.get("status")
+    status: formData.get("status"),
   });
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Update Invoice."
+      message: "Missing Fields. Failed to Update Invoice.",
     };
   }
 
@@ -97,7 +101,7 @@ export const updateInvoice = async (prevState: CreateFormState, formData: FormDa
   const body = {
     status,
     amount: amountInCents,
-    customer: customerId
+    customer: customerId,
   };
 
   try {
@@ -105,14 +109,15 @@ export const updateInvoice = async (prevState: CreateFormState, formData: FormDa
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo"
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo",
       },
       method: "PUT",
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
   } catch (error) {
+    console.log(error);
     return {
-      message: "Database Error: Failed to Update Invoice."
+      message: "Database Error: Failed to Update Invoice.",
     };
   }
   revalidatePath("/dashboard/invoices");
@@ -128,14 +133,15 @@ export const deleteInvoice = async (formData: FormData) => {
       headers: {
         "Content-Type": "application/json",
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo"
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGVmNzAwMmYzNGFjMWVlY2UxNzc2ZCIsImVtYWlsIjoibmV4dFR1dG9yaWFsQHRlc3QuY29tIiwibmFtZSI6Im5leHRUdXRvcmlhbCIsImlhdCI6MTczMzIyODM3M30.tlMGUN7S06L2fT1-We-IacbNnux5c0jK5MFCmyhYkBo",
       },
-      method: "DELETE"
+      method: "DELETE",
     });
     revalidatePath("/dashboard/invoices");
   } catch (error) {
+    console.log(error);
     return {
-      message: "Database Error: Failed to Update Invoice."
+      message: "Database Error: Failed to Update Invoice.",
     };
   }
 };
